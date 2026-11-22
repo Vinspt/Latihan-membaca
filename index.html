@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baca Keras: latihan membaca bahasa Inggris</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<style>
+:root{--bg:#EDF2F5;--card:#fff;--ink:#13293D;--mut:#5B6F82;--line:#CFDAE3;--acc:#0E6E7E;--onacc:#fff;--g:#1B7F45;--m:#A66B00;--b:#C0392B;--cur:#CDE8EE;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1B26;--card:#172736;--ink:#E6EEF4;--mut:#9DB0C0;--line:#2A3E50;--acc:#5CC3D3;--onacc:#0F1B26;--g:#4CC47F;--m:#E0A93B;--b:#EF7B6B;--cur:#1F4452;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1B26;--card:#172736;--ink:#E6EEF4;--mut:#9DB0C0;--line:#2A3E50;--acc:#5CC3D3;--onacc:#0F1B26;--g:#4CC47F;--m:#E0A93B;--b:#EF7B6B;--cur:#1F4452;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Figtree,system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:20px 18px 120px}
+h1{font:600 28px/1.15 Literata,Georgia,serif;margin:8px 0 6px}
+h2{font:700 18px/1.3 Figtree,sans-serif;margin:28px 0 10px}
+p{margin:0 0 12px}.mut{color:var(--mut)}
+.hide{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.card{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 10px;min-height:48px}
+.card .t{display:block;font:600 19px/1.3 Literata,Georgia,serif}
+.card .meta,.card .st{display:block;color:var(--mut);font-size:14px}
+.card .st{margin-top:4px;color:var(--acc);font-weight:600}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;margin:10px 0 0}
+.legend b{font-weight:700}.g{color:var(--g)}.m{color:var(--m)}.b{color:var(--b)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 14px;min-height:44px;font-weight:600}
+.btn.pri{background:var(--acc);color:var(--onacc);border-color:var(--acc)}
+.bar{height:6px;background:var(--line);border-radius:3px;margin:14px 0;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+#story{font:400 23px/1.95 Literata,Georgia,serif;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:10px 0}
+.w{border-radius:5px;padding:1px 2px;cursor:pointer}
+.w.g{color:var(--g);box-shadow:inset 0 -2px 0 var(--g)}
+.w.m{color:var(--m);box-shadow:inset 0 -2px 0 var(--m)}
+.w.b{color:var(--b);box-shadow:inset 0 -2px 0 var(--b)}
+.w.cur{background:var(--cur)}
+.dock{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px))}
+.dock div{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:12px}
+#mic{flex:1;min-height:56px;border-radius:28px;border:0;background:var(--acc);color:var(--onacc);font-weight:700;font-size:17px}
+#mic.on{background:var(--b);color:#fff}
+#stat{font-size:14px;color:var(--mut);margin:6px 0}
+#msg{color:var(--b);font-weight:600;min-height:0}
+.big{font:600 64px/1 Literata,Georgia,serif;margin:10px 0 4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:8px 14px;min-height:40px;font-weight:600}
+.v{display:flex;justify-content:space-between;gap:12px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;text-align:left;min-height:48px}
+.v span:first-child{font:600 18px Literata,Georgia,serif}.v span:last-child{color:var(--mut);text-align:right}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<section id="home">
+  <h1>Baca keras</h1>
+  <p class="mut">Pilih cerita, tekan mikrofon, lalu bacakan dengan suara keras. Setiap kata dinilai saat kamu mengucapkannya.</p>
+  <div class="legend"><span class="g"><b>Hijau</b> tepat</span><span class="m"><b>Kuning</b> kurang jelas</span><span class="b"><b>Merah</b> perlu diulang</span></div>
+  <h2>Cerita</h2>
+  <div id="list"></div>
+</section>
+
+<section id="read" class="hide">
+  <div class="top"><button class="btn" id="back">Kembali</button><button class="btn" id="reset">Ulangi dari awal</button></div>
+  <h1 id="title"></h1>
+  <div class="bar"><i id="fill"></i></div>
+  <div id="stat"></div>
+  <div id="story" aria-live="off"></div>
+  <p class="mut" style="font-size:14px">Ketuk sebuah kata untuk mendengar ucapannya.</p>
+  <div id="msg" role="alert"></div>
+  <div class="row"><button class="btn" id="finish">Selesai dan lihat hasil</button></div>
+  <div class="dock"><div><button id="mic">Mulai membaca</button></div></div>
+</section>
+
+<section id="done" class="hide">
+  <h1>Hasil sesi</h1>
+  <div class="big" id="score"></div>
+  <p id="verdict" class="mut"></p>
+  <h2>Kata yang perlu dilatih</h2>
+  <div class="chips" id="prac"></div>
+  <h2>Kosakata yang cukup sulit</h2>
+  <div id="vocab"></div>
+  <div class="row"><button class="btn pri" id="again">Baca lagi</button><button class="btn" id="others">Pilih cerita lain</button></div>
+</section>
+</main>
+
+<script>
+const STORIES=[
+{id:'umbrella',title:'The Lost Umbrella',level:'Mudah',
+text:['Maya woke up early on a rainy Monday morning.','She looked for her umbrella, but it was nowhere to be found.','She searched under the bed and behind the door.','Finally, she asked her little brother if he had seen it.','He smiled and pointed to the garden.','The umbrella was open on the grass, and a small cat was sleeping under it.','Maya laughed because the cat looked so comfortable.','She did not want to wake the sleepy animal.','So she borrowed her mother’s old yellow raincoat instead.','On the way to school, the rain became lighter and lighter.','By the afternoon, the sun appeared above the buildings.','Maya decided that a wet morning was a small price for a happy cat.'],
+vocab:[['umbrella','payung'],['searched','mencari'],['borrowed','meminjam'],['comfortable','nyaman'],['raincoat','jas hujan'],['appeared','muncul']]},
+{id:'lighthouse',title:'A Night at the Lighthouse',level:'Menengah',
+text:['Every evening, an old keeper climbed the narrow stairs of the lighthouse.','He carried a lantern and a small notebook.','The wind was strong, and the waves crashed against the rocks below.','At the top, he cleaned the great glass lamp until it shone.','Ships far away depended on that light to avoid danger.','One night, a thick fog covered the whole coast.','The keeper rang a heavy bell every few minutes to guide the sailors.','Hours passed, and his hands became tired and cold.','Suddenly, he heard a distant horn answering his bell.','A fishing boat slowly emerged from the mist and reached the harbor safely.','The captain waved gratefully from the deck.','The keeper wrote one quiet line in his notebook: everyone is home tonight.'],
+vocab:[['lighthouse','mercusuar'],['narrow','sempit'],['fog','kabut'],['depended','bergantung'],['emerged','muncul keluar'],['harbor','pelabuhan'],['gratefully','dengan penuh syukur']]},
+{id:'roof',title:'The Garden on the Roof',level:'Menengah',
+text:['Daniel lived in a busy city with very little green space.','He wanted a garden, but his apartment had no yard.','One day, he noticed that the roof of his building was empty.','He asked the landlord for permission to use it.','The landlord agreed, as long as Daniel kept the place tidy.','Daniel carried bags of soil up the stairs, one at a time.','He planted tomatoes, herbs, and a few bright sunflowers.','Neighbors began to visit and offered to help him water the plants.','Within a few months, the roof became a peaceful community garden.','They shared fresh vegetables and exchanged recipes every weekend.','Daniel realized that a small idea can bring many people together.'],
+vocab:[['landlord','pemilik gedung'],['permission','izin'],['tidy','rapi'],['soil','tanah'],['neighbors','tetangga'],['community','komunitas'],['exchanged','bertukar'],['realized','menyadari']]},
+{id:'bicycle',title:'The Red Bicycle',level:'Mudah',
+text:['Tom got a red bicycle for his birthday.','It was shiny and very fast.','He rode it to the park after lunch.','His friend Lily was waiting by the big tree.','She wanted to try the bicycle too.','Tom showed her how to hold the handles.','Lily fell down once, but she did not cry.','She stood up and tried again.','After a few minutes, she could ride alone.','They rode together until the sun went down.','Tom was happy to share his gift.'],
+vocab:[['bicycle','sepeda'],['shiny','mengilap'],['waiting','menunggu'],['handles','stang, pegangan'],['share','berbagi'],['gift','hadiah']]},
+{id:'grandma',title:'Breakfast with Grandma',level:'Mudah',
+text:['Every Sunday, Ben visits his grandmother.','She lives in a small house near the river.','The kitchen always smells like fresh bread.','Grandma cooks eggs and makes sweet tea.','Ben helps her set the table.','They eat slowly and talk about the week.','She tells him funny stories about her childhood.','Ben laughs so hard that he almost spills his tea.','After breakfast, they wash the dishes together.','Then they walk along the river and feed the ducks.','Ben loves these quiet Sundays.'],
+vocab:[['fresh','segar'],['slowly','pelan-pelan'],['childhood','masa kecil'],['spills','menumpahkan'],['dishes','piring'],['ducks','bebek']]},
+{id:'student',title:'The New Student',level:'Mudah',
+text:['On Tuesday, a new student came to our class.','His name was Arif, and he looked very nervous.','He sat alone in the back of the room.','At lunch, nobody invited him to their table.','I felt sorry for him, so I walked over.','I asked if he liked football.','His face lit up, and he started to talk quickly.','Soon, three other boys joined us.','We decided to play a game after school.','Arif scored two goals and everyone cheered.','By Friday, he was part of our group.'],
+vocab:[['nervous','gugup'],['invited','mengundang'],['joined','bergabung'],['scored','mencetak (gol)'],['cheered','bersorak'],['group','kelompok']]},
+{id:'picnic',title:'A Rainy Picnic',level:'Mudah',
+text:['Sara and her family planned a picnic on Saturday.','They packed sandwiches, apples, and a big bottle of juice.','When they arrived at the lake, dark clouds covered the sky.','Soon, it started to rain heavily.','Everyone ran to a small wooden shelter nearby.','They sat close together and laughed at the situation.','Sara’s father told a silly joke about wet sandwiches.','After half an hour, the rain finally stopped.','A beautiful rainbow appeared over the water.','They ate their lunch on the damp grass.','It was the best picnic Sara could remember.'],
+vocab:[['planned','merencanakan'],['packed','mengemas'],['shelter','tempat berteduh'],['silly','konyol'],['rainbow','pelangi'],['damp','lembap']]},
+{id:'violin',title:'The Missing Violin',level:'Menengah',
+text:['The night before the concert, Elena could not find her violin.','She had practiced for months, and now it had disappeared.','Her teacher, Mr. Costa, told her to remain calm.','They checked the music room, the hallway, and the bus.','Nothing was there, and Elena felt a wave of panic.','Then she remembered lending it to a classmate.','She called him immediately, and he apologized for forgetting.','He brought the violin to her house within twenty minutes.','Elena tuned the strings carefully and played one slow song.','The sound was perfect, and her worries slowly faded.','The next evening, she performed in front of two hundred people.','Afterward, she promised never to lend her instrument again.'],
+vocab:[['disappeared','menghilang'],['calm','tenang'],['panic','panik'],['lending','meminjamkan'],['apologized','meminta maaf'],['performed','tampil']]},
+{id:'trail',title:'The Mountain Trail',level:'Menengah',
+text:['Last summer, a group of friends decided to hike a famous mountain trail.','They woke up before sunrise to avoid the heat.','The path was steep, and the rocks were slippery from the morning dew.','After two hours, they stopped to drink water and rest.','One of them twisted her ankle, so the others shared her heavy backpack.','Progress was slow, but nobody complained.','Near the summit, a cold wind blew across the ridge.','They put on their jackets and kept climbing.','At last, they reached the top and looked down at the clouds.','The view was so beautiful that everyone fell silent.','They took a photograph to remember the moment.','The journey home felt shorter because they were all smiling.'],
+vocab:[['trail','jalur'],['steep','curam'],['slippery','licin'],['ankle','pergelangan kaki'],['summit','puncak'],['ridge','punggung gunung'],['complained','mengeluh']]},
+{id:'baker',title:'The Baker’s Secret',level:'Menengah',
+text:['In a small town, there was a bakery that everyone loved.','The baker, Mrs. Lopez, woke up at four every morning.','She mixed the dough by hand and never used a machine.','People often asked for her secret recipe.','She always smiled and said it was a family tradition.','One winter, a young man asked to work as her assistant.','She watched him carefully for several weeks.','He was patient, honest, and willing to learn.','Finally, she invited him to stay after closing time.','She whispered that the secret was not a rare ingredient.','The real secret was to bake with care and to share the bread with others.','The young man nodded, and he never forgot those words.'],
+vocab:[['dough','adonan'],['recipe','resep'],['tradition','tradisi'],['assistant','asisten'],['patient','sabar'],['ingredient','bahan'],['whispered','berbisik']]},
+{id:'clockmaker',title:'The Clockmaker’s Apprentice',level:'Sulit',
+text:['In a narrow street of an old European city, there stood a tiny workshop filled with the sound of ticking clocks.','The clockmaker, a stern man named Anselm, accepted only one apprentice every decade.','When a curious girl named Clara arrived, he doubted that she possessed the patience required for such delicate work.','She spent the first month sweeping floors and polishing brass, without touching a single tool.','Instead of complaining, Clara observed every movement of his hands with remarkable concentration.','One morning, a valuable pocket watch stopped, and the customer grew increasingly impatient.','Anselm struggled for hours, but he could not identify the problem.','Quietly, Clara suggested that a microscopic piece of dust had jammed the smallest gear.','He examined the mechanism under a lens and discovered that she was right.','From that day forward, he trusted her judgment and began to teach her everything he knew.','Years later, the workshop carried her name above the door, yet the old ticking sound remained unchanged.'],
+vocab:[['apprentice','murid magang'],['stern','tegas, keras'],['possessed','memiliki'],['delicate','rumit, halus'],['remarkable','luar biasa'],['jammed','macet'],['mechanism','mekanisme']]},
+{id:'marathon',title:'The Marathon',level:'Sulit',
+text:['Nobody expected Hana to finish the marathon, least of all herself.','She had started running only eight months earlier, hoping to escape the pressure of a stressful job.','Training was difficult, and several times she nearly gave up.','On the morning of the race, thousands of runners gathered at the starting line, buzzing with anticipation.','The first half felt surprisingly easy, and she maintained a steady rhythm.','Around the thirtieth kilometer, however, her legs began to ache and her confidence wavered.','A stranger beside her noticed her struggle and offered a few encouraging words.','Together they pushed through the hardest stretch of the course.','When the finish line finally appeared, the crowd roared with enthusiasm.','Hana crossed it in a modest time, but she wept with relief and pride.','She realized that endurance is less about speed than about refusing to quit.'],
+vocab:[['anticipation','penantian penuh harap'],['maintained','mempertahankan'],['wavered','goyah'],['stretch','ruas, bagian'],['enthusiasm','antusiasme'],['modest','sederhana'],['endurance','daya tahan']]},
+{id:'translator',title:'The Translator',level:'Sulit',
+text:['Miguel worked as a translator for an international organization, and his job required extraordinary precision.','A single misplaced word could change the meaning of an entire agreement.','One afternoon, he was asked to interpret during a tense negotiation between two delegations.','Both sides spoke politely, yet their tone revealed deep suspicion.','Halfway through the meeting, one delegate used an idiom that had no equivalent in the other language.','Miguel hesitated for a moment, because a literal translation would have sounded insulting.','Instead, he chose a neutral phrase that preserved the intention without causing offense.','The atmosphere in the room softened immediately, and the discussion moved forward.','After the meeting, a senior diplomat thanked him for his discretion.','Miguel shrugged and replied that good translation is often about understanding people rather than words.'],
+vocab:[['precision','ketepatan'],['negotiation','perundingan'],['delegation','delegasi'],['idiom','idiom'],['literal','harfiah'],['preserved','mempertahankan'],['discretion','kebijaksanaan']]},
+{id:'train',title:'The Last Train',level:'Sulit',
+text:['Nora missed the last train home by less than a minute.','She stood on the deserted platform, watching the red lights disappear into the darkness.','Her phone had run out of battery, and the station office was already locked.','A cold drizzle began to fall, soaking her thin jacket.','After considering her options, she decided to walk toward the nearest town.','The road was unlit, and every unfamiliar sound made her heart race.','Eventually, she noticed a dim glow in the distance, coming from a small roadside café.','The owner, a kind elderly woman, offered her a towel and a cup of hot chocolate.','She allowed Nora to charge her phone and call her sister.','Within an hour, a car arrived, and Nora climbed in, exhausted but grateful.','She later admitted that the unlucky night had taught her to appreciate unexpected kindness.'],
+vocab:[['deserted','sepi, terlantar'],['drizzle','gerimis'],['soaking','membuat basah kuyup'],['unfamiliar','asing'],['dim','redup'],['elderly','lanjut usia'],['appreciate','menghargai']]},
+{id:'inventor',title:'The Quiet Inventor',level:'Sulit',
+text:['Oliver was an unremarkable student who rarely spoke during lessons.','Behind his silence, however, his mind was constantly searching for solutions to everyday problems.','After noticing that elderly passengers struggled to read bus schedules, he designed a simple device that announced each stop aloud.','He built the first prototype from scrap materials in his garage.','Many people dismissed it as a trivial gadget, and several investors declined to support him.','Undeterred, Oliver tested the device on a local bus route for six months.','The feedback from passengers was overwhelmingly positive, particularly among those with poor eyesight.','Gradually, the city council recognized its value and agreed to install it on every vehicle.','Reporters soon wanted to interview the young inventor, but he preferred to remain out of the spotlight.','He explained that innovation does not require genius, only attention and persistence.'],
+vocab:[['unremarkable','biasa saja'],['prototype','prototipe'],['dismissed','mengabaikan'],['trivial','sepele'],['undeterred','tidak gentar'],['recognized','mengakui'],['persistence','ketekunan'],['innovation','inovasi']]}
+];
+
+const LEVELS=['Mudah','Menengah','Sulit'];
+const $=s=>document.querySelector(s);
+const KEY='baca-keras:v1';
+let D={stories:{},cur:null};
+try{D=Object.assign(D,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+const store=()=>{try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}};
+const S={s:null,W:[],pos:0,sc:[],on:false,rec:null};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+function show(id){['home','read','done'].forEach(v=>$('#'+v).classList.toggle('hide',v!==id));window.scrollTo(0,0)}
+function speak(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+
+function home(){
+  const el=$('#list');el.innerHTML='';
+  LEVELS.forEach(lv=>{
+  const items=STORIES.filter(x=>x.level===lv);
+  const dn=items.filter(x=>D.stories[x.id]&&D.stories[x.id].attempts).length;
+  const h=document.createElement('h2');h.textContent='Level '+lv+' ('+dn+' dari '+items.length+' cerita selesai)';el.appendChild(h);
+  items.forEach(s=>{
+    const p=D.stories[s.id]||{};
+    const run=D.cur&&D.cur.id===s.id&&D.cur.pos>0;
+    const b=document.createElement('button');b.className='card';
+    b.innerHTML='<span class="t">'+s.title+'</span><span class="meta">'+s.text.length+' kalimat</span><span class="st">'+
+      (run?'Lanjutkan dari kata ke-'+D.cur.pos:(p.attempts?'Skor terbaik '+p.best+'%, dibaca '+p.attempts+' kali':'Belum dibaca'))+'</span>';
+    b.onclick=()=>openStory(s.id);
+    el.appendChild(b);
+  });});
+  show('home');
+}
+
+function openStory(id){
+  const s=STORIES.find(x=>x.id===id);S.s=s;
+  S.W=s.text.join(' ').split(/\s+/).map(t=>({t:t,n:t.toLowerCase().replace(/[^a-z]/g,'')}));
+  const c=D.cur;
+  if(c&&c.id===id&&c.pos>0){S.pos=c.pos;S.sc=c.sc.slice(0,c.pos)}else{S.pos=0;S.sc=[]}
+  $('#title').textContent=s.title;
+  $('#story').innerHTML=S.W.map((w,i)=>'<span class="w" data-i="'+i+'">'+w.t+'</span>').join(' ');
+  $('#msg').textContent='';
+  if(!SR)$('#msg').textContent='Peramban ini belum mendukung pengenalan suara. Gunakan Chrome, Edge, atau Safari terbaru.';
+  ui();paint(true);show('read');
+}
+
+function lev(a,b){
+  const m=a.length,n=b.length;let p=[];for(let j=0;j<=n;j++)p[j]=j;
+  for(let i=1;i<=m;i++){let c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}
+  return p[n];
+}
+function sim(a,b){if(!a||!b)return 0;return a===b?1:1-lev(a,b)/Math.max(a.length,b.length)}
+const norm=t=>t.toLowerCase().replace(/['’]/g,'').replace(/[^a-z\s]/g,' ').split(/\s+/).filter(Boolean);
+
+function align(h,base,tent){
+  const W=S.W,out=[];let i=base,j=0;
+  while(j<h.length&&i<W.length){
+    const s=sim(W[i].n,h[j]);
+    if(s>=.6){out.push(s);i++;j++;continue}
+    if(tent&&j===h.length-1)break;
+    const sj=j+1<h.length?sim(W[i].n,h[j+1]):0;
+    const si=i+1<W.length?sim(W[i+1].n,h[j]):0;
+    if(sj>=.75&&sj>=si){j++;continue}
+    if(si>=.75){out.push(0);i++;continue}
+    out.push(s);i++;j++;
+  }
+  return out;
+}
+
+function acc(){const v=S.sc.filter(x=>x!=null);return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length*100):0}
+
+function paint(scroll){
+  const ws=$('#story').children;
+  for(let i=0;i<ws.length;i++){
+    const v=S.sc[i];
+    ws[i].className='w'+(v==null?'':v>=.85?' g':v>=.6?' m':' b')+(i===S.pos?' cur':'');
+  }
+  $('#fill').style.width=(S.pos/S.W.length*100)+'%';
+  $('#stat').textContent=S.pos+' dari '+S.W.length+' kata dibaca, akurasi sementara '+acc()+'%';
+  if(scroll&&ws[S.pos])ws[S.pos].scrollIntoView({block:'center',behavior:'smooth'});
+}
+
+function ui(){
+  const m=$('#mic');m.classList.toggle('on',S.on);
+  m.textContent=S.on?'Berhenti':(S.pos>0?'Lanjutkan membaca':'Mulai membaca');
+}
+
+function listen(){
+  const r=new SR();S.rec=r;const base=S.pos;
+  r.lang='en-US';r.continuous=true;r.interimResults=true;
+  r.onresult=e=>{
+    let t='';for(let k=0;k<e.results.length;k++)t+=e.results[k][0].transcript+' ';
+    const fin=e.results[e.results.length-1].isFinal;
+    const out=align(norm(t),base,!fin);
+    S.sc=S.sc.slice(0,base).concat(out);S.pos=base+out.length;
+    D.cur={id:S.s.id,pos:S.pos,sc:S.sc};store();
+    paint(true);
+    if(S.pos>=S.W.length)finish();
+  };
+  r.onerror=e=>{
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'){S.on=false;$('#msg').textContent='Izin mikrofon ditolak. Izinkan mikrofon di peramban, atau buka halaman ini di tab baru.';ui()}
+    else if(e.error==='audio-capture'){S.on=false;$('#msg').textContent='Mikrofon tidak ditemukan.';ui()}
+  };
+  r.onend=()=>{if(S.on&&S.rec===r)setTimeout(()=>{if(S.on)listen()},150)};
+  try{r.start()}catch(e){}
+}
+function stop(){S.on=false;try{S.rec&&S.rec.abort()}catch(e){}ui();paint()}
+
+$('#mic').onclick=()=>{
+  if(!SR){$('#msg').textContent='Peramban ini belum mendukung pengenalan suara. Gunakan Chrome, Edge, atau Safari terbaru.';return}
+  if(S.on){stop();return}
+  if(S.pos>=S.W.length){S.pos=0;S.sc=[]}
+  $('#msg').textContent='';S.on=true;ui();listen();
+};
+$('#story').onclick=e=>{const i=e.target.dataset&&e.target.dataset.i;if(i!=null)speak(S.W[i].t)};
+$('#back').onclick=()=>{stop();home()};
+$('#reset').onclick=()=>{stop();S.pos=0;S.sc=[];D.cur=null;store();paint(true);ui()};
+$('#finish').onclick=()=>finish();
+
+function finish(){
+  stop();
+  const a=acc(),id=S.s.id,p=D.stories[id]||{best:0,attempts:0};
+  if(S.sc.filter(x=>x!=null).length>0){p.attempts++;p.best=Math.max(p.best,a);D.stories[id]=p}
+  D.cur=null;store();
+  $('#score').textContent=a+'%';
+  $('#verdict').textContent=a>=85?'Pelafalanmu sudah jelas dan tepat.':a>=65?'Cukup baik. Ulangi kata yang berwarna kuning dan merah.':'Terus berlatih. Ucapkan lebih pelan dan jelas.';
+  const seen={},low=[];
+  S.W.forEach((w,i)=>{const v=S.sc[i];if(v!=null&&v<.75&&w.n.length>=3&&!seen[w.n]){seen[w.n]=1;low.push([w.n,v])}});
+  low.sort((x,y)=>x[1]-y[1]);
+  const pr=$('#prac');pr.innerHTML='';
+  if(!low.length)pr.innerHTML='<span class="mut">Tidak ada. Semua kata terucap dengan baik.</span>';
+  low.slice(0,8).forEach(x=>{const c=document.createElement('button');c.className='chip';c.textContent=x[0];c.onclick=()=>speak(x[0]);pr.appendChild(c)});
+  const vb=$('#vocab');vb.innerHTML='';
+  S.s.vocab.forEach(x=>{const b=document.createElement('button');b.className='v';b.innerHTML='<span>'+x[0]+'</span><span>'+x[1]+'</span>';b.onclick=()=>speak(x[0]);vb.appendChild(b)});
+  show('done');
+}
+$('#again').onclick=()=>{D.cur=null;store();openStory(S.s.id)};
+$('#others').onclick=home;
+home();
+</script>
+</body>
+</html>
